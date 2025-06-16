@@ -1,0 +1,20 @@
+[Unit]
+Description=Sonarr Usernet
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=sonarr-usernet
+PublishPort=8987:8989
+Image=lscr.io/linuxserver/sonarr:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/sonarr-usernet/:/config:Z
+Volume=/data/media:/data:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

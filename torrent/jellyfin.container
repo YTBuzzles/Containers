@@ -1,0 +1,26 @@
+[Unit]
+Description=Podman - Jellyfin
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=lscr.io/linuxserver/jellyfin:latest
+AutoUpdate=registry
+ContainerName=jellyfin
+Environment=TZ=Australia/Melbourne
+AddDevice=/dev/dri/renderD128:/dev/dri/renderD128
+Volume=/data/config/jellyfin:/config:Z
+Volume=/data/media/media:/data/media:z
+PublishPort=8096:8096
+PublishPort=8920:8920
+PublishPort=7359:7359/udp
+PublishPort=1900:1900/udp
+Network=torrent
+
+[Service]
+TimeoutStartSec=900
+Restart=Always
+
+[Install]
+WantedBy=default.target
+

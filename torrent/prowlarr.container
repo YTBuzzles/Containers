@@ -1,0 +1,19 @@
+[Unit]
+Description=Prowlarr
+After=network.target getty.target multi-user.target jellyfin.service
+
+[Container]
+ContainerName=prowlarr
+PublishPort=9696:9696
+Image=lscr.io/linuxserver/prowlarr:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/prowlarr:/config:Z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

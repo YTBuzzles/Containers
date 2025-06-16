@@ -1,0 +1,19 @@
+[Unit]
+Description=Podman Container - Validate Environment Variables for Notesnook
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=notesnook-validate
+Image=docker.io/vandot/alpine-bash
+Network=notesnook
+Entrypoint=/entrypoint.sh
+Volume=/home/fedora-server/.config/containers/systemd/notesnook-entrypoints/validate-entrypoint.sh:/entrypoint.sh:Z
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+EnvironmentFile=./notesnook.env
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

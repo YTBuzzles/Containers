@@ -1,0 +1,18 @@
+[Unit]
+Description=Jellyseerr
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=jellyseerr
+PublishPort=5055:5055
+Image=docker.io/fallenbagel/jellyseerr:latest
+Environment=LOG_LEVEL=debug
+Volume=/data/config/jellyseerr:/app/config:Z
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

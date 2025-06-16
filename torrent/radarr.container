@@ -1,0 +1,20 @@
+[Unit]
+Description=Radarr For Torrents
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=radarr
+PublishPort=7878:7878
+Image=lscr.io/linuxserver/radarr:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/radarr:/config:Z
+Volume=/data/media:/data:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

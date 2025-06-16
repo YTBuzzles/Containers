@@ -1,0 +1,32 @@
+[Unit]
+Description=Podman Container - Notesnook Server
+After=network.target getty.target notesnook-s3.service setup-s3.service identity-server.service multi-user.target
+
+[Container]
+ContainerName=notesnook-server
+EnvironmentFile=./notesnook.env
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+Environment=MONGODB_CONNECTION_STRING=mongodb://notesnook-db:27017/?replSet=rs0
+Environment=MONGODB_DATABASE_NAME=notesnook
+Environment=S3_INTERNAL_SERVICE_URL="http://<ip>:<Port>"
+Environment=S3_INTERNAL_BUCKET_NAME="attachments"
+Environment=S3_ACCESS_KEY_ID=admin
+Environment=S3_ACCESS_KEY=secret
+Environment=S3_SERVICE_URL=<public url>
+Environment=S3_REGION=us-east-1
+Environment=S3_BUCKET_NAME="attachments"
+HostName=notesnook-server
+Image=docker.io/streetwriters/notesnook-sync:latest
+PublishPort=5264:5264
+HealthCmd=wget --tries=1 -nv -q  http://localhost:5264/health -O- || exit 1
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+Network=notesnook
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target

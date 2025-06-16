@@ -1,0 +1,20 @@
+[Unit]
+Description=FlareSolver
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=flaresolver
+PublishPort=8191:8191
+Image=ghcr.io/flaresolverr/flaresolverr:latest
+Environment=PUID=1000 PGID=1000
+Environment=TZ=Australia/Melbourne
+Volume=/data/config/prowlarr:/config:Z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

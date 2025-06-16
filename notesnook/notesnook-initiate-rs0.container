@@ -1,0 +1,12 @@
+[Unit]
+Description=Podman Container - Initiate Replica Set (RS0) for MongoDB
+After=network.target getty.target notesnook-db.service multi-user.target
+
+[Container]
+ContainerName=notesnook-initiate-rs0
+Image=docker.io/mongo:7.0.12
+Network=notesnook
+Exec=/bin/sh -c "echo 'rs.initiate(); rs.status();' | mongosh mongodb://notesnook-db:27017"
+
+[Install]
+WantedBy=multi-user.target default.target

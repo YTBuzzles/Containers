@@ -1,0 +1,24 @@
+[Unit]
+Description=Podman Container - Notesnook MongoDB Database
+After=network.target getty.target validate.service multi-user.target
+
+[Container]
+ContainerName=notesnook-db
+Image=mongo:7.0.12
+HostName=notesnook-db
+Network=notesnook
+Volume=/home/fedora-server/data/notesnook/db:/data/db:Z
+Volume=/home/fedora-server/data/notesnook/db:/data/configdb:Z
+Exec=/usr/bin/mongod --replSet rs0 --bind_ip_all
+HealthCmd=echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017 --quiet
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

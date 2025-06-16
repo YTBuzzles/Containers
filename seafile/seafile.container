@@ -1,0 +1,25 @@
+[Unit]
+Description=Seafile
+After=network.target getty.target seafile-db.service seafile-memcached.service multi-user.target
+
+[Container]
+ContainerName=seafile
+Image=docker.io/seafileltd/seafile-mc:11.0-latest
+PublishPort=8002:80
+Volume=/data/seafile/data:/shared:Z
+Environment=DB_HOST=seafile-db
+Environment=DB_ROOT_PASSWD=db_dev  # Required, the value should be root's password of MySQL service.
+Environment=TIME_ZONE=Etc/UTC  # Optional, default is UTC. Should be uncomment and set to your local time zone.
+Environment=SEAFILE_ADMIN_EMAIL=me@example.com # Specifies Seafile admin user, default is 'me@example.com'.
+Environment=SEAFILE_ADMIN_PASSWORD=asecret     # Specifies Seafile admin password, default is 'asecret'.
+Environment=SEAFILE_SERVER_LETSENCRYPT=false   # Whether to use https or not.
+Environment=SEAFILE_SERVER_HOSTNAME=files.ben.daedaluscraft.com # Specifies your host name if https is enabled.
+Environment=FORCE_HTTPS_IN_CONF=true
+Network=seafile
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

@@ -1,0 +1,24 @@
+[Unit]
+Description=Podman Container - SSE Server
+After=network.target getty.target identity-server.service notesnook-server.service multi-user.target
+
+[Container]
+ContainerName=notesnook-sse-server
+EnvironmentFile=./notesnook.env
+HostName=sse-server
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+Image=docker.io/streetwriters/sse:latest
+PublishPort=7264:7264
+HealthCmd=wget --tries=1 -nv -q http://localhost:7264/health -O- || exit 1
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+Network=notesnook
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

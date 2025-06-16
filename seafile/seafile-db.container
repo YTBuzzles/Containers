@@ -1,0 +1,19 @@
+[Unit]
+Description=Seafile Mariadb Database
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=seafile-db
+Image=docker.io/library/mariadb:10.11
+Environment=MYSQL_ROOT_PASSWORD=db_dev
+Environment=MYSQL_LOG_CONSOLE=true
+Environment=MARIADB_AUTO_UPGRADE=1
+Volume=/data/seafile/mysql:/var/lib/mysql:Z
+Network=seafile
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

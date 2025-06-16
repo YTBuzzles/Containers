@@ -1,0 +1,22 @@
+[Unit]
+Description=Qbittorrent
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=qbittorrent
+Environment=LANGS=en_GB
+PublishPort=8081:8080
+PublishPort=6881:6881
+Environment=PUID=1000 PGID=1000
+UIDMap=+%U:@%U
+Image=lscr.io/linuxserver/qbittorrent:latest
+Volume=/data/media/torrents:/data/torrents:z
+Volume=/data/config/qbittorrent:/config:Z
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

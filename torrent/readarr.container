@@ -1,0 +1,20 @@
+[Unit]
+Description=Readarr for audiobook torrenting
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=readarr
+PublishPort=8787:8787
+Image=lscr.io/linuxserver/readarr:develop
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/readarr:/config:Z
+Volume=/data/media/:/data:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

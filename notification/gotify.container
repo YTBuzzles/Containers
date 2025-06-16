@@ -1,0 +1,19 @@
+[Unit]
+Description=Gotify notification server
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=gotify
+PublishPort=8005:80
+Image=ghcr.io/gotify/server:latest
+Environment=GOTIFY_DEFAULTUSER_PASS='admin'
+Environment=TZ=Australia/Melbourne
+Volume=/data/config/gotify/:/app/data:Z
+Network=gotify
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

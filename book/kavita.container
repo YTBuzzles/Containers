@@ -1,0 +1,20 @@
+[Unit]
+Description=Kavita for book management and reading
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=kavita
+PublishPort=5000:5000
+Image=lscr.io/linuxserver/kavita:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/kavita:/config:Z
+Volume=/data/media/:/data:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

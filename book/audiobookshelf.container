@@ -1,0 +1,21 @@
+[Unit]
+Description=AudioBookShelf for managing and playing audio books
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=audiobookshelf
+PublishPort=13378:80
+Image=ghcr.io/advplyr/audiobookshelf:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/audiobookshelf/config/:/config:Z
+Volume=/data/media/media/books/:/data:z
+Volume=/data/config/audiobookshelf/metadata/:/metadata:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

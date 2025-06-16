@@ -1,0 +1,18 @@
+[Unit]
+Description=Jackett
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=jackett
+PublishPort=9117:9117
+Image=lscr.io/linuxserver/jackett:latest
+Environment=AUTO_UPDATE=true
+Volume=/data/config/jackett:/config:Z
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

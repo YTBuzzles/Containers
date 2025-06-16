@@ -1,0 +1,26 @@
+[Unit]
+Description=Podman Container - Identity Server
+After=network.target getty.target notesnook-db.service multi-user.target
+
+[Container]
+ContainerName=notesnook-identity-server
+EnvironmentFile=./notesnook.env
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+Environment=MONGODB_CONNECTION_STRING=mongodb://notesnook-db:27017/identity?replSet=rs0
+Environment=MONGODB_DATABASE_NAME=identity
+HostName=identity-server
+Image=docker.io/streetwriters/identity:latest
+PublishPort=8264:8264
+HealthCmd=/usr/bin/wget --tries=1 -nv -q http://localhost:8264/health -O- || exit 1
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+Network=notesnook
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

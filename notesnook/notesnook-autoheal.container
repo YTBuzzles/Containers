@@ -1,0 +1,11 @@
+[Unit]
+Description=Notesnook Validate
+After=network.target getty.target notesnook-validate.service multi-user.target
+
+[Container]
+ContainerName=notesnook-autoheal
+Environment=AUTOHEAL_INTERVAL=60 AUTOHEAL_START_PERIOD=300 AUTOHEAL_DEFAULT_STOP_TIMEOUT=10
+Image=docker.io/willfarrell/autoheal:latest
+
+[Install]
+WantedBy=multi-user.target default.target

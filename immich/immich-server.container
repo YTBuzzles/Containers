@@ -1,0 +1,31 @@
+[Unit]
+Requires=immich-redis.service immich-database.service 
+After=network.target getty.target multi-user.target immich-redis.service immich-database.service 
+
+[Container]
+Image=ghcr.io/immich-app/immich-server:v1.134.0
+ContainerName=immich_server
+EnvironmentFile=./immich.env
+Network=immich
+PublishPort=2284:2283
+
+Volume=/home/fedora-server/data/immich/library:/usr/src/app/upload:z
+
+# If localtime is not set (e.g. Fedora CoreOS) : 
+# Volume=/usr/share/zoneinfo/Europe/Paris:/etc/localtime:ro
+Volume=/etc/localtime:/etc/localtime:ro
+
+HealthCmd=["/bin/bash", "immich-healthcheck"]
+HealthStartPeriod=3m
+HealthInterval=10s
+HealthTimeout=30s
+HealthRetries=10
+Notify=healthy
+
+[Service]
+# give some time to the database to start
+ExecStartPre=sleep 30
+Restart=always
+
+[Install]
+WantedBy=default.target

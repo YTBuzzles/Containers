@@ -1,0 +1,27 @@
+[Unit]
+Description=Podman Container - Notesnook S3 Service
+After=network.target getty.target validate.service multi-user.target
+
+[Container]
+ContainerName=notesnook-s3
+EnvironmentFile=./notesnook.env
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+Volume=/home/fedora-server/data/notesnook/s3:/data/s3:Z
+Environment=MINIO_BROWSER=on
+Image=docker.io/minio/minio:latest
+PublishPort=9012:9090
+PublishPort=9011:9000
+Exec=server /data/s3 --console-address :9090
+HealthCmd=timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+Network=notesnook
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

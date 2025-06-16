@@ -1,0 +1,16 @@
+[Unit]
+Description=Seafile Memcached
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=memcached
+Image=docker.io/library/memcached:1.6.18
+Exec=/usr/local/bin/memcached -m 256
+Network=seafile
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+

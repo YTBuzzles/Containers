@@ -1,0 +1,19 @@
+[Unit]
+Description=Radarr For Usernet
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=radarr-usernet
+PublishPort=7879:7878
+Image=lscr.io/linuxserver/radarr:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/radar-usernet/:/config:Z
+Volume=/data/media:/data:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target

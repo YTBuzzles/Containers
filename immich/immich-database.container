@@ -1,0 +1,25 @@
+[Unit]
+Description=Immich Database
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=immich_postgres
+Network=immich
+Environment="POSTGRES_INITDB_ARGS=--data-checksums"
+EnvironmentFile=immich.env
+Environment=PUID=1000 PGID=1000
+UIDMap=+%U:@%U
+Image=ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:fa4f6e0971f454cd95fec5a9aaed2ed93d8f46725cc6bc61e0698e97dba96da1
+Volume=/home/fedora-server/data/immich/database:/var/lib/postgresql/data:z
+Volume=./immich-database-healthcheck:/health.sh:Z
+# If you want to use the unit provided in `database_backup`
+# Volume=/path/to/db/backups:/var/db_backup/:z
+HealthCmd=["/bin/bash", "/health.sh"]
+HealthStartPeriod=5m
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=5
+Notify=healthy
+
+[Service]
+Restart=always

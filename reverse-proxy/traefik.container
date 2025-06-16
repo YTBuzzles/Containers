@@ -1,0 +1,24 @@
+[Container]
+ContainerName=traefik
+Volume=/home/fedora-server/data/traefik/config:/conf:z
+Volume=/home/fedora-server/data/traefik/logs/:/logs:Z
+Volume=/home/fedora-server/data/traefik/traefik.yml:/traefik.yml:z
+Image=docker.io/library/traefik:latest
+SecurityLabelType=traefik.process
+PodmanArgs= --security-opt label=disable
+Timezone=Australia/Melbourne
+PublishPort=8090:80
+PublishPort=8091:443
+PublishPort=8084:8080
+Network=traefik
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+
+
+[Unit]
+Description=Traefik container
+

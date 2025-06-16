@@ -1,0 +1,24 @@
+[Unit]
+Description=Podman Container - Monograph Server
+After=network.target getty.target notesnook-server.service multi-user.target
+
+[Container]
+ContainerName=notesnook-monograph-server
+EnvironmentFile=./notesnook.env
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+Environment=API_HOST=http://notesnook-server:5264
+Environment=PUBLIC_URL=<public url>
+Image=docker.io/streetwriters/monograph:latest
+PublishPort=6264:3000
+HealthCmd=wget --tries=1 -nv -q  http://localhost:3000/api/health -O- || exit 1
+HealthInterval=40s
+HealthTimeout=30s
+HealthRetries=3
+HealthStartPeriod=60s
+Network=notesnook
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target

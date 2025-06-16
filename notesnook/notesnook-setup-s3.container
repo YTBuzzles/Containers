@@ -1,0 +1,18 @@
+[Unit]
+Description=Podman Container - Setup S3
+After=network.target getty.target notesnook-s3.service multi-user.target
+
+[Container]
+ContainerName=notesnook-setup-s3
+EnvironmentFile=./notesnook.env
+Image=docker.io/minio/mc:latest
+Network=notesnook
+Entrypoint=/bin/bash
+Exec=-c "until mc alias set minio http://notesnook-s3:9000/ ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-minioadmin}; do sleep 1; done; mc mb minio/attachments -p"
+Volume=/home/fedora-server/.config/containers/systemd/notesnook.env:/notesnook.env:z
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target

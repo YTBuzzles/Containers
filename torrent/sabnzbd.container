@@ -1,0 +1,19 @@
+[Unit]
+Description=Sabnzbd
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=sabnzbd
+PublishPort=8083:8080
+Image=lscr.io/linuxserver/sabnzbd:latest
+Environment=PUID=1000 PGID=1000
+Volume=/data/config/sabnzbd:/config:Z
+Volume=/data/media/usernet:/data/usernet:z
+UIDMap=+%U:@%U
+Network=torrent
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target

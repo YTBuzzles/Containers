@@ -1,0 +1,22 @@
+[Unit]
+Description=Stirling PDF
+After=network.target getty.target multi-user.target
+
+[Container]
+ContainerName=stirlingpdf
+Environment=LANGS=en_GB
+PublishPort=8001:8080
+Image=docker.io/stirlingtools/stirling-pdf:latest
+Volume=/home/fedora-server/data/stirlingpdf/trainingData:/usr/share/tessdata:Z
+Volume=/home/fedora-server/data/stirlingpdf/extraConfigs:/configs:Z
+Volume=/home/fedora-server/data/stirlingpdf/customFiles:/customFiles/:Z
+Volume=/home/fedora-server/data/stirlingpdf/logs:/logs/:Z
+Volume=/home/fedora-server/data/stirlingpdf/pipeline:/pipeline/:Z
+
+[Service]
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target default.target
+
+
